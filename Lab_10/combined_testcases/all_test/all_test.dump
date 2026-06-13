@@ -1,0 +1,155 @@
+
+output/all_test.elf:     file format elf32-littleriscv
+
+Contents of section .text:
+ 0000 93005000 1381b0ff 63040100 6f00c015  ..P.....c...o...
+ 0010 9301f000 13f2010f 63040200 6f00c014  ........c...o...
+ 0020 93e2010f 1303f00f 63906214 93c3f20f  ........c.b.....
+ 0030 63840300 6f004013 13041000 93242400  c...o.@......$$.
+ 0040 63948412 13351000 63108512 93153400  c....5..c.....4.
+ 0050 13d62500 93062000 6318d610 13d72540  ..%... .c.....%@
+ 0060 6314d710 b3008400 33818040 631e810e  c.......3..@c...
+ 0070 b3c12000 13023000 6398410e b3f24000  .. ...0.c.A...@.
+ 0080 13032000 6392620e b3e32000 639e430c  .. .c.b... .c.C.
+ 0090 33241100 631a240c b3341100 6396240c  3$..c.$..4..c.$.
+ 00a0 1305a000 9305a000 6304b500 6f00c00b  ........c...o...
+ 00b0 63140500 6f00400b 13065000 6344a600  c...o.@...P.cD..
+ 00c0 6f00800a 6354c500 6f00000a 6364a600  o...cT..o...cd..
+ 00d0 6f008009 6374c500 6f000009 ef008000  o...ct..o.......
+ 00e0 6f008008 13010000 1381c0ff 630e0106  o...........c...
+ 00f0 6f004000 97010000 93810101 67820100  o.@.........g...
+ 0100 6f008006 93020000 9302c2ff 638e0204  o...........c...
+ 0110 6f004000 37533412 97030000 13000000  o.@.7S4.........
+ 0120 b7400000 1301f007 23802000 83810000  .@......#. .....
+ 0130 93f1f10f 639a2102 37120000 13024223  ....c.!.7.....B#
+ 0140 23914000 83922000 93f2f2ff 639e4200  #.@... .....c.B.
+ 0150 37e30000 1303d3ea 23a26000 83a34000  7.......#.`...@.
+ 0160 63946300 6f00c000 13000000 6ff0dfff  c.c.o.......o...
+ 0170 6f000000                             o...            
+
+Disassembly of section .text:
+
+00000000 <_start>:
+   0:	00500093          	li	ra,5
+   4:	ffb08113          	addi	sp,ra,-5
+   8:	00010463          	beqz	sp,10 <pass_addi>
+   c:	15c0006f          	j	168 <fail>
+
+00000010 <pass_addi>:
+  10:	00f00193          	li	gp,15
+  14:	0f01f213          	andi	tp,gp,240
+  18:	00020463          	beqz	tp,20 <pass_andi>
+  1c:	14c0006f          	j	168 <fail>
+
+00000020 <pass_andi>:
+  20:	0f01e293          	ori	t0,gp,240
+  24:	0ff00313          	li	t1,255
+  28:	14629063          	bne	t0,t1,168 <fail>
+  2c:	0ff2c393          	xori	t2,t0,255
+  30:	00038463          	beqz	t2,38 <pass_xori>
+  34:	1340006f          	j	168 <fail>
+
+00000038 <pass_xori>:
+  38:	00100413          	li	s0,1
+  3c:	00242493          	slti	s1,s0,2
+  40:	12849463          	bne	s1,s0,168 <fail>
+  44:	00103513          	seqz	a0,zero
+  48:	12851063          	bne	a0,s0,168 <fail>
+  4c:	00341593          	slli	a1,s0,0x3
+  50:	0025d613          	srli	a2,a1,0x2
+  54:	00200693          	li	a3,2
+  58:	10d61863          	bne	a2,a3,168 <fail>
+  5c:	4025d713          	srai	a4,a1,0x2
+  60:	10d71463          	bne	a4,a3,168 <fail>
+  64:	008400b3          	add	ra,s0,s0
+  68:	40808133          	sub	sp,ra,s0
+  6c:	0e811e63          	bne	sp,s0,168 <fail>
+  70:	0020c1b3          	xor	gp,ra,sp
+  74:	00300213          	li	tp,3
+  78:	0e419863          	bne	gp,tp,168 <fail>
+  7c:	0040f2b3          	and	t0,ra,tp
+  80:	00200313          	li	t1,2
+  84:	0e629263          	bne	t0,t1,168 <fail>
+  88:	0020e3b3          	or	t2,ra,sp
+  8c:	0c439e63          	bne	t2,tp,168 <fail>
+  90:	00112433          	slt	s0,sp,ra
+  94:	0c241a63          	bne	s0,sp,168 <fail>
+  98:	001134b3          	sltu	s1,sp,ra
+  9c:	0c249663          	bne	s1,sp,168 <fail>
+  a0:	00a00513          	li	a0,10
+  a4:	00a00593          	li	a1,10
+  a8:	00b50463          	beq	a0,a1,b0 <pass_beq>
+  ac:	0bc0006f          	j	168 <fail>
+
+000000b0 <pass_beq>:
+  b0:	00051463          	bnez	a0,b8 <pass_bne>
+  b4:	0b40006f          	j	168 <fail>
+
+000000b8 <pass_bne>:
+  b8:	00500613          	li	a2,5
+  bc:	00a64463          	blt	a2,a0,c4 <pass_blt>
+  c0:	0a80006f          	j	168 <fail>
+
+000000c4 <pass_blt>:
+  c4:	00c55463          	bge	a0,a2,cc <pass_bge>
+  c8:	0a00006f          	j	168 <fail>
+
+000000cc <pass_bge>:
+  cc:	00a66463          	bltu	a2,a0,d4 <pass_bltu>
+  d0:	0980006f          	j	168 <fail>
+
+000000d4 <pass_bltu>:
+  d4:	00c57463          	bgeu	a0,a2,dc <pass_bgeu>
+  d8:	0900006f          	j	168 <fail>
+
+000000dc <pass_bgeu>:
+  dc:	008000ef          	jal	ra,e4 <jal_target>
+  e0:	0880006f          	j	168 <fail>
+
+000000e4 <jal_target>:
+  e4:	00000113          	li	sp,0
+  e8:	ffc08113          	addi	sp,ra,-4
+  ec:	06010e63          	beqz	sp,168 <fail>
+  f0:	0040006f          	j	f4 <pass_jal>
+
+000000f4 <pass_jal>:
+  f4:	00000197          	auipc	gp,0x0
+  f8:	01018193          	addi	gp,gp,16 # 104 <label_jalr>
+  fc:	00018267          	jalr	tp,gp
+ 100:	0680006f          	j	168 <fail>
+
+00000104 <label_jalr>:
+ 104:	00000293          	li	t0,0
+ 108:	ffc20293          	addi	t0,tp,-4 # fffffffc <__stack_top+0xffff7ffc>
+ 10c:	04028e63          	beqz	t0,168 <fail>
+ 110:	0040006f          	j	114 <pass_jalr>
+
+00000114 <pass_jalr>:
+ 114:	12345337          	lui	t1,0x12345
+ 118:	00000397          	auipc	t2,0x0
+ 11c:	00000013          	nop
+ 120:	000040b7          	lui	ra,0x4
+ 124:	07f00113          	li	sp,127
+ 128:	00208023          	sb	sp,0(ra) # 4000 <__heap_start>
+ 12c:	00008183          	lb	gp,0(ra)
+ 130:	0ff1f193          	zext.b	gp,gp
+ 134:	02219a63          	bne	gp,sp,168 <fail>
+ 138:	00001237          	lui	tp,0x1
+ 13c:	23420213          	addi	tp,tp,564 # 1234 <done+0x10c4>
+ 140:	00409123          	sh	tp,2(ra)
+ 144:	00209283          	lh	t0,2(ra)
+ 148:	fff2f293          	andi	t0,t0,-1
+ 14c:	00429e63          	bne	t0,tp,168 <fail>
+ 150:	0000e337          	lui	t1,0xe
+ 154:	ead30313          	addi	t1,t1,-339 # dead <__stack_top+0x5ead>
+ 158:	0060a223          	sw	t1,4(ra)
+ 15c:	0040a383          	lw	t2,4(ra)
+ 160:	00639463          	bne	t2,t1,168 <fail>
+ 164:	00c0006f          	j	170 <done>
+
+00000168 <fail>:
+ 168:	00000013          	nop
+ 16c:	ffdff06f          	j	168 <fail>
+
+00000170 <done>:
+ 170:	0000006f          	j	170 <done>
